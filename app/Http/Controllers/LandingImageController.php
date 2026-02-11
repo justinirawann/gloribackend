@@ -2,53 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LandingImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class LandingImageController extends Controller
 {
     public function index()
     {
-        $images = DB::table('landing_images')
-            ->orderBy('order')
-            ->get()
-            ->map(function($img) {
-                return url('storage/' . $img->image_path);
-            });
-        
-        return response()->json(['images' => $images]);
+        $images = LandingImage::orderBy('order')->get();
+        return view('admin.landing-images.index', compact('images'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|max:5120'
+            'image' => 'required|image|max:2048',
+            'order' => 'nullable|integer'
         ]);
 
         $path = $request->file('image')->store('landing-images', 'public');
-        
-        $maxOrder = DB::table('landing_images')->max('order') ?? 0;
-        
-        DB::table('landing_images')->insert([
+
+        LandingImage::create([
             'image_path' => $path,
-            'order' => $maxOrder + 1,
-            'created_at' => now(),
-            'updated_at' => now()
+            'order' => $request->order ?? 0
         ]);
 
-        return response()->json(['message' => 'Image uploaded successfully']);
+        return redirect()->route('admin.landing-images.index')->with('success', 'Image berhasil ditambahkan');
     }
 
-    public function destroy($id)
+    public function update(Request $request, LandingImage $landingImage)
     {
-        $image = DB::table('landing_images')->where('id', $id)->first();
-        
-        if ($image) {
-            Storage::disk('public')->delete($image->image_path);
-            DB::table('landing_images')->where('id', $id)->delete();
+        $request->validate([
+            'image' => 'nullable|image|max:2048',
+            'order' => 'nullable|integer'
+        ]);
+
+        if ($request->hasFile('image')) {
+            Storage::disk('public')->delete($landingImage->image_path);
+            $path = $request->file('image')->store('landing-images', 'public');
+            $landingImage->image_path = $path;
         }
 
-        return response()->json(['message' => 'Image deleted successfully']);
+        $landingImage->order = $request->order ?? $landingImage->order;
+        $landingImage->save();
+
+        return redirect()->route('admin.landing-images.index')->with('success', 'Image berhasil diupdate');
+    }
+
+    public function destroy(LandingImage $landingImage)
+    {
+        Storage::disk('public')->delete($landingImage->image_path);
+        $landingImage->delete();
+
+        return redirect()->route('admin.landing-images.index')->with('success', 'Image berhasil dihapus');
     }
 }
