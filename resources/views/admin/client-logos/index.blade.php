@@ -10,24 +10,32 @@
     </button>
 </div>
 
-<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4">
-    @foreach($logos as $logo)
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <img src="{{ asset('storage/' . $logo->image_path) }}" class="card-img-top p-3" alt="Client Logo" style="height: 150px; object-fit: contain; background: #f8f9fa;">
-            <div class="card-body p-2">
-                <form action="{{ route('admin.client-logos.destroy', $logo) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Yakin hapus?')">
-                        <i class="bi bi-trash"></i> Hapus
-                    </button>
-                </form>
+@if($logos->isEmpty())
+    <div class="text-center py-5">
+        <i class="bi bi-image" style="font-size: 80px; color: #ddd;"></i>
+        <h3 class="mt-3 text-muted">Belum ada logo client</h3>
+        <p class="text-muted">Klik tombol "Tambah Logo" untuk menambahkan logo client pertama</p>
+    </div>
+@else
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4">
+        @foreach($logos as $logo)
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ asset('storage/' . $logo->image_path) }}" class="card-img-top p-3" alt="Client Logo" style="height: 150px; object-fit: contain; background: #f8f9fa;">
+                <div class="card-body p-2">
+                    <form action="{{ route('admin.client-logos.destroy', $logo) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Yakin hapus?')">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
+        @endforeach
     </div>
-    @endforeach
-</div>
+@endif
 
 <!-- Add Modal -->
 <div class="modal fade" id="addModal" tabindex="-1">

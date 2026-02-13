@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LandingImageController;
 use App\Http\Controllers\ClientLogoController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\AuthController;
 
@@ -30,6 +31,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::get('/', [ClientLogoController::class, 'index'])->name('index');
         Route::post('/', [ClientLogoController::class, 'store'])->name('store');
         Route::delete('/{clientLogo}', [ClientLogoController::class, 'destroy'])->name('destroy');
+    });
+    
+    Route::prefix('services')->name('services.')->group(function () {
+        Route::get('/', [ServiceController::class, 'index'])->name('index');
+        Route::post('/', [ServiceController::class, 'store'])->name('store');
+        Route::put('/{service}', [ServiceController::class, 'update'])->name('update');
+        Route::delete('/{service}', [ServiceController::class, 'destroy'])->name('destroy');
     });
     
     Route::prefix('contact-messages')->name('contact-messages.')->group(function () {
