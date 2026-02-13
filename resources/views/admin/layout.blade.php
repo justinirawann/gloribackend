@@ -104,6 +104,10 @@
                 <i class="bi bi-building"></i>
                 <span>Client Logos</span>
             </a>
+            <a href="{{ route('admin.contact-messages.index') }}" class="sidebar-item {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}">
+                <i class="bi bi-envelope"></i>
+                <span>Contact Messages</span>
+            </a>
         </div>
         
         <div class="logout-btn">
