@@ -112,6 +112,18 @@
                 <i class="bi bi-envelope"></i>
                 <span>Contact Messages</span>
             </a>
+            <a href="{{ route('admin.portfolios.index') }}" class="sidebar-item {{ request()->routeIs('admin.portfolios.*') ? 'active' : '' }}">
+                <i class="bi bi-folder"></i>
+                <span>Portfolios</span>
+            </a>
+            <a href="{{ route('admin.categories.index') }}" class="sidebar-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                <i class="bi bi-tag"></i>
+                <span>Categories</span>
+            </a>
+            <a href="{{ route('admin.about-images.index') }}" class="sidebar-item {{ request()->routeIs('admin.about-images.*') ? 'active' : '' }}">
+                <i class="bi bi-card-image"></i>
+                <span>About Us Images</span>
+            </a>
         </div>
         
         <div class="logout-btn">
@@ -143,5 +155,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('scripts')
 </body>
 </html>

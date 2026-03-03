@@ -10,6 +10,22 @@
     </button>
 </div>
 
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 @if($services->isEmpty())
     <div class="text-center py-5">
         <i class="bi bi-gear" style="font-size: 80px; color: #ddd;"></i>
@@ -22,6 +38,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>Nama Service</th>
+                    <th>Banner</th>
                     <th>Deskripsi (ID)</th>
                     <th>Description (EN)</th>
                     <th width="150">Aksi</th>
@@ -31,6 +48,13 @@
                 @foreach($services as $service)
                 <tr>
                     <td><strong>{{ $service->name }}</strong></td>
+                    <td>
+                        @if($service->banner_image)
+                            <img src="{{ asset('storage/' . $service->banner_image) }}" alt="Banner" style="height: 50px; width: auto; border-radius: 4px;">
+                        @else
+                            <span class="text-muted small">No banner</span>
+                        @endif
+                    </td>
                     <td>
                         <span class="badge bg-primary mb-1">🇮🇩</span>
                         <div class="text-muted small">{{ Str::limit($service->description, 80) }}</div>
@@ -53,13 +77,11 @@
                     </td>
                 </tr>
 
-                <!-- Edit Modal -->
                 <div class="modal fade" id="editModal{{ $service->id }}" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form action="{{ route('admin.services.update', $service) }}" method="POST">
+                            <form action="{{ route('admin.services.update', $service) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
                                 <div class="modal-header">
                                     <h5 class="modal-title">Edit Service</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -68,6 +90,16 @@
                                     <div class="mb-3">
                                         <label class="form-label">Nama Service</label>
                                         <input type="text" name="name" class="form-control" value="{{ $service->name }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Banner Image</label>
+                                        @if($service->banner_image)
+                                            <div class="mb-2">
+                                                <img src="{{ asset('storage/' . $service->banner_image) }}" alt="Current Banner" style="max-width: 100%; height: auto; border-radius: 4px;">
+                                            </div>
+                                        @endif
+                                        <input type="file" name="banner_image" class="form-control" accept="image/*">
+                                        <small class="text-muted">Kosongkan jika tidak ingin mengubah banner</small>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Deskripsi (Indonesia)</label>
@@ -92,11 +124,10 @@
     </div>
 @endif
 
-<!-- Add Modal -->
 <div class="modal fade" id="addModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('admin.services.store') }}" method="POST">
+            <form action="{{ route('admin.services.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Service</h5>
@@ -106,6 +137,10 @@
                     <div class="mb-3">
                         <label class="form-label">Nama Service</label>
                         <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Banner Image</label>
+                        <input type="file" name="banner_image" class="form-control" accept="image/*">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi (Indonesia)</label>

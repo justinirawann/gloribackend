@@ -12,4 +12,10 @@ class ServiceApiController extends Controller
         $services = Service::all();
         return response()->json($services);
     }
+
+    public function show($id)
+    {
+        $service = Service::findOrFail($id);
+        return response()->json($service);
+    }
 }
