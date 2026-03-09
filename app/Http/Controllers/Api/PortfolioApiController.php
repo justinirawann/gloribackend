@@ -15,9 +15,12 @@ class PortfolioApiController extends Controller
 
     public function show($id)
     {
-        $portfolio = Portfolio::with(['displayedImages' => function($query) {
-            $query->orderBy('display_order');
-        }])->findOrFail($id);
+        $portfolio = Portfolio::with([
+            'displayedImages' => function($query) {
+                $query->orderBy('display_order');
+            },
+            'images'
+        ])->findOrFail($id);
         
         return response()->json($portfolio);
     }

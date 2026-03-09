@@ -10,6 +10,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PortfolioImageController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AboutImageController;
+use App\Http\Controllers\ContactInfoController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -72,5 +73,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::prefix('about-images')->name('about-images.')->group(function () {
         Route::get('/', [AboutImageController::class, 'index'])->name('index');
         Route::post('/update', [AboutImageController::class, 'update'])->name('update');
+    });
+    
+    Route::prefix('contact-info')->name('contact-info.')->group(function () {
+        Route::get('/', [ContactInfoController::class, 'index'])->name('index');
+        Route::post('/update', [ContactInfoController::class, 'update'])->name('update');
     });
 });

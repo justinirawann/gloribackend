@@ -124,6 +124,10 @@
                 <i class="bi bi-card-image"></i>
                 <span>About Us Images</span>
             </a>
+            <a href="{{ route('admin.contact-info.index') }}" class="sidebar-item {{ request()->routeIs('admin.contact-info.*') ? 'active' : '' }}">
+                <i class="bi bi-telephone"></i>
+                <span>Contact Info</span>
+            </a>
         </div>
         
         <div class="logout-btn">
