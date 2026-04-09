@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContactMessageApiController;
 use App\Http\Controllers\Api\PortfolioApiController;
 use App\Http\Controllers\Api\AboutImageApiController;
 use App\Http\Controllers\Api\ContactInfoApiController;
+use App\Http\Controllers\Api\TestimonialApiController;
 
 Route::get('/landing-images', [LandingImageApiController::class, 'index']);
 Route::get('/client-logos', [ClientLogoApiController::class, 'index']);
@@ -18,3 +19,4 @@ Route::get('/portfolios/{id}', [PortfolioApiController::class, 'show']);
 Route::get('/about-images', [AboutImageApiController::class, 'index']);
 Route::get('/contact-info', [ContactInfoApiController::class, 'index']);
 Route::post('/contact-messages', [ContactMessageApiController::class, 'store']);
+Route::get('/testimonials', [TestimonialApiController::class, 'index']);

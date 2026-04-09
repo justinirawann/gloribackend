@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AboutImageController;
 use App\Http\Controllers\ContactInfoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TestimonialController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -78,5 +79,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::prefix('contact-info')->name('contact-info.')->group(function () {
         Route::get('/', [ContactInfoController::class, 'index'])->name('index');
         Route::post('/update', [ContactInfoController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/', [TestimonialController::class, 'index'])->name('index');
+        Route::get('/create', [TestimonialController::class, 'create'])->name('create');
+        Route::post('/', [TestimonialController::class, 'store'])->name('store');
+        Route::get('/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('edit');
+        Route::put('/{testimonial}', [TestimonialController::class, 'update'])->name('update');
+        Route::delete('/{testimonial}', [TestimonialController::class, 'destroy'])->name('destroy');
     });
 });

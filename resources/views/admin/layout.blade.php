@@ -128,6 +128,10 @@
                 <i class="bi bi-telephone"></i>
                 <span>Contact Info</span>
             </a>
+            <a href="{{ route('admin.testimonials.index') }}" class="sidebar-item {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
+                <i class="bi bi-chat-quote"></i>
+                <span>Testimonials</span>
+            </a>
         </div>
         
         <div class="logout-btn">

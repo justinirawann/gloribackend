@@ -22,4 +22,9 @@ class Portfolio extends Model
     {
         return $this->hasMany(PortfolioImage::class)->where('is_displayed', true)->orderBy('display_order');
     }
+
+    public function testimonial()
+    {
+        return $this->hasOne(\App\Models\Testimonial::class);
+    }
 }
