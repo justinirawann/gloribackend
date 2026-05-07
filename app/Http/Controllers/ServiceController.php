@@ -19,11 +19,10 @@ class ServiceController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required|string',
-                'description_en' => 'required|string',
                 'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240'
             ]);
 
-            $data = $request->only('name', 'description', 'description_en');
+            $data = $request->only('name', 'description');
             
             if ($request->hasFile('banner_image')) {
                 $data['banner_image'] = $request->file('banner_image')->store('banners', 'public');
@@ -42,13 +41,11 @@ class ServiceController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required|string',
-                'description_en' => 'required|string',
                 'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240'
             ]);
 
             $service->name = $validated['name'];
             $service->description = $validated['description'];
-            $service->description_en = $validated['description_en'];
             
             if ($request->hasFile('banner_image')) {
                 if ($service->banner_image) {

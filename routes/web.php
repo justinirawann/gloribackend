@@ -11,8 +11,11 @@ use App\Http\Controllers\PortfolioImageController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AboutImageController;
 use App\Http\Controllers\ContactInfoController;
+use App\Http\Controllers\WebsiteContentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -24,7 +27,23 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Website Content (Landing Images, About Images, Contact Info)
+    Route::prefix('website-content')->name('website-content.')->group(function () {
+        Route::get('/', [WebsiteContentController::class, 'index'])->name('index');
+        
+        Route::post('/landing-image', [WebsiteContentController::class, 'storeLandingImage'])->name('landing-image.store');
+        Route::put('/landing-image/{landingImage}', [WebsiteContentController::class, 'updateLandingImage'])->name('landing-image.update');
+        Route::delete('/landing-image/{landingImage}', [WebsiteContentController::class, 'destroyLandingImage'])->name('landing-image.destroy');
+        
+        Route::post('/about-images', [WebsiteContentController::class, 'updateAboutImages'])->name('about-images.update');
+        
+        Route::post('/contact-info', [WebsiteContentController::class, 'updateContactInfo'])->name('contact-info.update');
+        
+        Route::post('/client-logo', [WebsiteContentController::class, 'storeClientLogo'])->name('client-logo.store');
+        Route::delete('/client-logo/{clientLogo}', [WebsiteContentController::class, 'destroyClientLogo'])->name('client-logo.destroy');
+    });
     
     Route::prefix('landing-images')->name('landing-images.')->group(function () {
         Route::get('/', [LandingImageController::class, 'index'])->name('index');
@@ -53,6 +72,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     
     Route::prefix('portfolios')->name('portfolios.')->group(function () {
         Route::get('/', [PortfolioController::class, 'index'])->name('index');
+        Route::get('/create', [PortfolioController::class, 'create'])->name('create');
         Route::post('/', [PortfolioController::class, 'store'])->name('store');
         Route::post('/{portfolio}', [PortfolioController::class, 'update'])->name('update');
         Route::delete('/{portfolio}', [PortfolioController::class, 'destroy'])->name('destroy');
@@ -66,6 +86,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('/create', [CategoryController::class, 'create'])->name('create');
         Route::post('/', [CategoryController::class, 'store'])->name('store');
         Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
         Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
@@ -88,5 +109,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::get('/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('edit');
         Route::put('/{testimonial}', [TestimonialController::class, 'update'])->name('update');
         Route::delete('/{testimonial}', [TestimonialController::class, 'destroy'])->name('destroy');
+    });
+    
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     });
 });
